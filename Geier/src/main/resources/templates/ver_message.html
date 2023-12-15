@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>View Messages</title>
+</head>
+<body>
+	<div align="center">
+		<h1>Mensajería</h1>
+		<br/>
+			<table border="0" cellpadding="10">
+				<tr>
+					<td> Enviado Por : </td>
+					<td th:text="*{message.sentby}">Username</td>
+				</tr>
+			
+				<tr>
+					<td>Asunto:</td>
+					<td th:text="*{message.asunto}">Asunto</td>
+				</tr>
+				
+				<tr>
+					<td>Mensaje:</td>
+					<td th:text="*{message.text}">mensaje</td>
+				</tr>
+				
+				<tr>
+					
+					
+					<td>
+					
+					<a th:href="@{'/responder/' + ${message.id}}">Responder</a>
+			<a href="/messages">Volver a Mensajes</a>
+				    
+				    </td>
+					
+				</tr>
+		
+			</table>
+			
+			
+	</div>
+</body>
+</html>

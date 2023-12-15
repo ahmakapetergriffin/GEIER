@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+	
+	<script type="text/javascript">
+		
+		
+	
+		
+		
+    function clearSearch() {
+			window.location = "[[@{/}]]";  
+    }
+    
+    
+    
+    function cargar() {
+		let a = document.getElementById('paratrampa').innerText;
+		document.getElementById('sentby').value = a;
+	
+		
+	}
+	
+	
+    
+
+		
+
+    
+</script>
+	
+<meta charset="ISO-8859-1">
+<title>Messages</title>
+</head>
+<body onload="cargar()">
+<div align="center">
+		
+<div sec:authorize="isAuthenticated()">
+		Has iniciado Sesión como <b><span sec:authentication="name" id="paratrampa">Username</span></b>
+		&nbsp; <br/>
+		
+		<i><span sec:authentication="principal.authorities">Roles</span></i>
+	</div>
+
+	
+	<br/><br/>
+	
+	<a href="newMessages">Crear nuevo mensaje</a>
+	
+	<br/> <br/>
+	
+	
+	
+	<form th:action="@{/enviados}">
+		<input type="text" name="sentby" id="sentby" size="50" th:value="${sentby}" style="display: none;" />
+		&nbsp; <br/>
+	
+		<input type="submit" value="Refrescar tus Mensajes"/>
+	</form>
+	<br/><br/>
+	
+	
+	
+	
+	<table border="1" cellpadding="10" id="tabla">
+		<thead>
+			<tr>
+				<th>Enviado Para: </th>
+				<th>Asunto :</th>
+				<th>Acciones :</th>
+
+				
+			
+				
+			</tr>
+		</thead>
+		<tbody>
+			
+			
+
+
+			
+			<tr th:each="enviados : ${listMessages}">
+				<td th:text="${enviados.username}">Sent by: </td>
+				<td th:text="${enviados.asunto}">Asunto : </td>
+				<td>
+					<a th:href="@{'/ver_enviado/' + ${enviados.id}}">Ver</a>
+					<a th:href="@{'/borrarenviado/' + ${enviados.id}}">Delete</a>
+				</td>
+			</tr>
+			
+
+		
+
+		</tbody>
+	</table>
+	
+	<br/> <br/>
+	
+	<input type="button" value="Clear" id="btnClear" onclick="clearSearch()"  />
+	
+	<br/> <br/>
+	
+	<a th:href = "@{/messages}"> Recibidos </a> <br/>
+	
+</div>
+</body>
+</html>

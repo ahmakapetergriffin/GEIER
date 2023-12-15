@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Create New Message</title>
+<script>
+	
+	function cargar() {
+		let a = document.getElementById('paratrampa').innerText;
+		document.getElementById('username1').value = a;
+		
+	}
+	
+</script>
+</head>
+<body onload="cargar()">
+	<div align="center">	
+		<h1>Create New Message</h1>
+		<br/>
+		 <b style="display: none;"><span sec:authentication="name" id="paratrampa">Username</span></b>
+		 
+		<form action="#" th:action="@{/save1}" th:object="${message}" method="post">
+			<table border="0" cellpadding="10">
+				<tr>
+					<td>Para :</td>
+					<td><input type="text" th:field="*{username}" /></td>
+				</tr>
+				<tr>
+					<td>Asunto:</td>
+					<td><input type="text" th:field="*{asunto}" /></td>
+				</tr>				
+				<tr>
+					<td>Mensaje: </td>
+					<td><input type="text" th:field="*{text}" /></td>
+				</tr>
+				<tr style="display:none;">
+					<td>Enviado por:</td>
+					<td><input type="text" th:field="*{sentby}" id="username1"/></td>
+				</tr>	
+							
+				<tr>
+					<td colspan="2"><button type="submit">Save</button></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</body>
+</html>
