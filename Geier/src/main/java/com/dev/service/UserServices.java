@@ -101,8 +101,6 @@ public class UserServices {
 		
 	}
 	
-	public User get(Long id) {
-		return repo.findById(id).get();
-	}
+
 	
 }

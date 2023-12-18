@@ -47,6 +47,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 		.antMatchers("/messages").authenticated()
+		.antMatchers("/new").hasAnyAuthority("ADMIN", "CREATOR")
+		.antMatchers("/edit/**").hasAnyAuthority("ADMIN", "EDITOR")
+		.antMatchers("/delete/**").hasAuthority("ADMIN")
+		.antMatchers("/messages").authenticated()
 			.antMatchers("/users").hasAnyAuthority("ADMIN", "CREATOR")
 			.anyRequest().permitAll()
 			.and()

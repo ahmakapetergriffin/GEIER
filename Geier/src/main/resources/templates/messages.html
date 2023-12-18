@@ -14,13 +14,7 @@
     }
     
     
-    
-    function cargar() {
-		let a = document.getElementById('paratrampa').innerText;
-		document.getElementById('username').value = a;
-	
-		
-	}
+
 	
 	
     
@@ -33,7 +27,7 @@
 <meta charset="ISO-8859-1">
 <title>Messages</title>
 </head>
-<body onload="cargar()">
+<body>
 <div align="center">
 		
 <div sec:authorize="isAuthenticated()">
@@ -42,7 +36,17 @@
 		
 		<i><span sec:authentication="principal.authorities">Roles</span></i>
 	</div>
-
+	
+	<div th:with="someVariable=${#authentication.getPrincipal().getUsername()}">
+	
+	 
+	 
+		<!--
+		<div sec:authentication="principal.username"/>
+		  <span th:text="${#authentication.getPrincipal().getUsername()}"></span>
+		  
+	  -->
+	
 	
 	<br/><br/>
 	
@@ -51,13 +55,7 @@
 	<br/> <br/>
 	
 	
-	
-	<form th:action="@{/messages}">
-		<input type="text" name="username" id="username" size="50" th:value="${username}" style="display: none;" />
-		&nbsp; <br/>
-	
-		<input type="submit" value="Refrescar tus Mensajes"/>
-	</form>
+
 	<br/><br/>
 	
 	
@@ -82,12 +80,14 @@
 
 			
 			<tr th:each="messages : ${listMessages}">
+				<div th:if="${messages.username == someVariable}">
 				<td th:text="${messages.sentby}">Sent by: </td>
 				<td th:text="${messages.asunto}">Asunto : </td>
 				<td>
 					<a th:href="@{'/edit1/' + ${messages.id}}">Ver</a>
 					<a th:href="@{'/delete1/' + ${messages.id}}">Delete</a>
 				</td>
+				</div>
 			</tr>
 			
 

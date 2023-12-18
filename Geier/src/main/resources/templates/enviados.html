@@ -14,13 +14,7 @@
     }
     
     
-    
-    function cargar() {
-		let a = document.getElementById('paratrampa').innerText;
-		document.getElementById('sentby').value = a;
-	
-		
-	}
+
 	
 	
     
@@ -33,7 +27,7 @@
 <meta charset="ISO-8859-1">
 <title>Messages</title>
 </head>
-<body onload="cargar()">
+<body>
 <div align="center">
 		
 <div sec:authorize="isAuthenticated()">
@@ -42,6 +36,8 @@
 		
 		<i><span sec:authentication="principal.authorities">Roles</span></i>
 	</div>
+	
+	<div th:with="someVariable=${#authentication.getPrincipal().getUsername()}">
 
 	
 	<br/><br/>
@@ -51,13 +47,7 @@
 	<br/> <br/>
 	
 	
-	
-	<form th:action="@{/enviados}">
-		<input type="text" name="sentby" id="sentby" size="50" th:value="${sentby}" style="display: none;" />
-		&nbsp; <br/>
-	
-		<input type="submit" value="Refrescar tus Mensajes"/>
-	</form>
+
 	<br/><br/>
 	
 	
@@ -82,12 +72,14 @@
 
 			
 			<tr th:each="enviados : ${listMessages}">
+				<div th:if="${enviados.sentby == someVariable}">
 				<td th:text="${enviados.username}">Sent by: </td>
 				<td th:text="${enviados.asunto}">Asunto : </td>
 				<td>
 					<a th:href="@{'/ver_enviado/' + ${enviados.id}}">Ver</a>
 					<a th:href="@{'/borrarenviado/' + ${enviados.id}}">Delete</a>
 				</td>
+				</div>
 			</tr>
 			
 

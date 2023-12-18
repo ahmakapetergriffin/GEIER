@@ -42,14 +42,10 @@ public class EnviadosService {
 
 
 
-	public List<Enviados> listAll(String sentby) {
+	public List<Enviados> listAll() {
 		
-		if (sentby != null) {
-            return enviadosRepository.getSentBy(sentby); 
-            
-        } 
 		
-		return null;
+		return enviadosRepository.findAll();
 	}
 
 

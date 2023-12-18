@@ -17,14 +17,10 @@ public class MessagesService {
 	@Autowired
 	private MessagesRepository messagesRepository;
 
-	public List<Messages> listAll(String username) {
+	public List<Messages> listAll() {
 		
-		if (username != null) {
-            return messagesRepository.getUserName(username); 
-            
-        } 
-		
-		return null;
+	
+		return messagesRepository.findAll();
 		
 	}
 	

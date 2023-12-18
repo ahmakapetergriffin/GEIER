@@ -19,11 +19,26 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.dev.model.Enviados;
+import com.dev.model.Product;
 import com.dev.model.Messages;
 import com.dev.model.User;
 import com.dev.service.EnviadosService;
 import com.dev.service.MessagesService;
+import com.dev.service.ProductService;
 import com.dev.service.UserServices;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
 
 
 
@@ -40,6 +55,9 @@ public class AppController {
 	
 	@Autowired
 	private EnviadosService enviadosService;
+	
+	@Autowired
+	private ProductService productService;
 	
 	
 	
@@ -90,25 +108,17 @@ public class AppController {
 		}
 	}
 	
-	
-	@GetMapping("/users/edit/{id}")
-	public String editUser(@PathVariable("id") Long id, Model model) {
-		User user = userService.get(id);
-		model.addAttribute("user",user);
-		return "user_form";
-	}
-	
+
 	
 	//LOGIN - USUARIO
 	
 	
 	//MENSAJES
 		@GetMapping("/messages")
-		public String listMessages(Model model,@Param("username") String username) {
+		public String listMessages(Model model) {
 			
-			List<Messages> listMessages = messageService.listAll(username);
+			List<Messages> listMessages = messageService.listAll();
 			model.addAttribute("listMessages", listMessages);
-			model.addAttribute("username", username);
 
 			return "messages";
 		}
@@ -147,6 +157,19 @@ public class AppController {
 			return "messages";
 		}
 		
+		
+		@RequestMapping("/responder/{id}")
+		public ModelAndView showResponderForm(@PathVariable(name = "id") Integer id,Model model) {
+			ModelAndView mav = new ModelAndView("responder");
+			Messages message = messageService.get(id);
+			mav.addObject("responder", message);
+			
+			Messages message1 = new Messages();
+			model.addAttribute("message", message1);
+			
+			return mav;
+		}
+		
 
 		//responder
 		
@@ -155,11 +178,10 @@ public class AppController {
 
 		
 		@GetMapping("/enviados")
-		public String listEnviados(Model model,@Param("sentby") String sentby) {
+		public String listEnviados(Model model) {
 			
-			List<Enviados> listMessages = enviadosService.listAll(sentby);
+			List<Enviados> listMessages = enviadosService.listAll();
 			model.addAttribute("listMessages", listMessages);
-			model.addAttribute("sentby", sentby);
 
 			return "enviados";
 		}
@@ -186,7 +208,69 @@ public class AppController {
 		
 		// MENSAJES
 		
+		
+		// PRODUCT
+		
+		// Add a product UI
+	    @GetMapping("/add")
+	    public String addProductUI(Model model) {
+	        model.addAttribute("product", new Product());
+	        return "add-product";
+	    }
+	    // Add a product API
+	    @PostMapping("/add")
+	    public String addProduct(@ModelAttribute Product product, @RequestParam("imageFile") MultipartFile imageFile) throws IOException, IOException {
+	        productService.addProduct(product, imageFile);
+	        return "redirect:/get-products";
+	    }
+	    //Get all Products
+	    @GetMapping("/get-products")
+	    public String listProducts(Model model,@Param("keyword") String keyword,@Param("keyword1") String keyword1,@Param("keyword2") Float keyword2,@Param("keyword3") Float keyword3) {
+	        List<Product> products = productService.getProducts(keyword,keyword1,keyword2,keyword3);
+	        
+	        model.addAttribute("products", products);
+	        model.addAttribute("keyword", keyword);
+			model.addAttribute("keyword1", keyword1);
+			model.addAttribute("keyword2", keyword2);
+			model.addAttribute("keyword3", keyword3);
+	        
+	        return "get-products";
+	    }
+	    //Get Image using product ID
+	    @GetMapping(value = "/{productId}/image")
+	    public ResponseEntity<byte[]> getProductImage(@PathVariable Long productId) {
+	        Optional<Product> productOptional = productService.getProduct(productId);
+	        if (productOptional.isPresent()) {
+	            Product product = productOptional.get();
+	            byte[] imageBytes = java.util.Base64.getDecoder().decode(product.getImage());
+	            HttpHeaders headers = new HttpHeaders();
+	            headers.setContentType(MediaType.IMAGE_JPEG);
+	            return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
+	        } else {
+	            return new ResponseEntity<>(new byte[0], HttpStatus.NOT_FOUND);
+	        }
+	    }
+	    
+	    @RequestMapping("/edit/{id}")
+		public ModelAndView showEditProductForm(@PathVariable(name = "id") Long id) {
+			ModelAndView mav = new ModelAndView("edit_product");
+			
+			Product product = productService.get(id);
+			mav.addObject("product", product);
+			
+			return mav;
+		}	
 	
+		
+		@RequestMapping("/delete/{id}")
+		public String deleteProduct(@PathVariable(name = "id") Long id) {
+			productService.delete(id);
+			
+			return "redirect:/";
+		}
+	    
+		
+		// PRODUCT
 	
 	
 }

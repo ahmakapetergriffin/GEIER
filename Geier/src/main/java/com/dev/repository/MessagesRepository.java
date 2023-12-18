@@ -10,9 +10,6 @@ import com.dev.model.Messages;
 public interface MessagesRepository extends JpaRepository<Messages, Integer> {
 	
 	
-	@Query("SELECT m FROM Messages m WHERE m.username LIKE %?1%")
-    public List<Messages> getUserName(String username);
-	
 	
 
 }
