@@ -316,7 +316,7 @@ public class AppController {
 	    
 	    @RequestMapping("/edit/{id}")
 		public ModelAndView showEditProductForm(@PathVariable(name = "id") Long id) {
-			ModelAndView mav = new ModelAndView("edit_product");
+			ModelAndView mav = new ModelAndView("edituser");
 			
 			Product product = productService.get(id);
 			mav.addObject("product", product);
