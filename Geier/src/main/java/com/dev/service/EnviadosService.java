@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.dev.model.Enviados;
+import com.dev.model.Messages;
 import com.dev.repository.EnviadosRepository;
 import com.dev.repository.MessagesRepository;
 
@@ -23,14 +24,14 @@ public class EnviadosService {
 	
 	
 	
-	public void save(Enviados enviado) {
+	public void save(Messages enviado) {
 		
 	
 		
 		enviadosRepository.save(enviado);
 	}
 	
-	public Enviados get(Integer id) {
+	public Messages get(Integer id) {
 		return enviadosRepository.findById(id).get();
 	}
 	
@@ -42,7 +43,7 @@ public class EnviadosService {
 
 
 
-	public List<Enviados> listAll() {
+	public List<Messages> listAll() {
 		
 		
 		return enviadosRepository.findAll();

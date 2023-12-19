@@ -14,6 +14,8 @@ public class Product {
 	private String brand;
 	private String madein;
 	private float price;
+	private String ubicacion;
+	private String telefono;
 	
 
 	@Lob
@@ -69,6 +71,22 @@ public class Product {
 
 	public void setImage(String image) {
 		this.image = image;
+	}
+
+	public String getUbicacion() {
+		return ubicacion;
+	}
+
+	public void setUbicacion(String ubicacion) {
+		this.ubicacion = ubicacion;
+	}
+
+	public String getTelefono() {
+		return telefono;
+	}
+
+	public void setTelefono(String telefono) {
+		this.telefono = telefono;
 	}
 
 	

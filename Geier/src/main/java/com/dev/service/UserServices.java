@@ -12,6 +12,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.dev.model.Messages;
 import com.dev.model.Role;
 import com.dev.model.User;
 import com.dev.repository.RoleRepository;
@@ -59,13 +60,13 @@ public class UserServices {
 			throws MessagingException, UnsupportedEncodingException {
 		String toAddress = user.getUsername();
 		String fromAddress = "caracicatriz83@gmail.com";
-		String senderName = "your company name";
-		String subject = "Please verify your registration";
-		String content = "Dear [[name]],<br>"
-				+ "Please click the link below to verify your registration:<br>"
+		String senderName = "Geier";
+		String subject = "Verificacion de Correo";
+		String content = "[[name]],<br>"
+				+ "Por favor, haz click sobre el link para verificar tu correo<br>"
 				+ "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFY</a></h3>"
-				+ "Thank you,<br>"
-				+ "Your company name.";
+				+ "Gracias<br>"
+				+ "Geier";
 		
 		MimeMessage message = mailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message);
@@ -101,6 +102,17 @@ public class UserServices {
 		
 	}
 	
+	
+	public User get(Long id) {
+		return repo.findById(id).get();
+	}
+	
+public void save(User user) {
+		
+	
+		
+		repo.save(user);
+	}
 
 	
 }

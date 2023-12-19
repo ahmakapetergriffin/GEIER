@@ -48,18 +48,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()
 		.antMatchers("/messages").authenticated()
 		.antMatchers("/new").hasAnyAuthority("ADMIN", "CREATOR")
-		.antMatchers("/edit/**").hasAnyAuthority("ADMIN", "EDITOR")
-		.antMatchers("/delete/**").hasAuthority("ADMIN")
 		.antMatchers("/messages").authenticated()
-			.antMatchers("/users").hasAnyAuthority("ADMIN", "CREATOR")
 			.anyRequest().permitAll()
 			.and()
 			.formLogin()
-				.usernameParameter("username")
-				.defaultSuccessUrl("/users")
-				.permitAll()
+			.permitAll()
+			.loginPage("/login")
+			.usernameParameter("username")
+			.passwordParameter("password")
+			.loginProcessingUrl("/doLogin")
 			.and()
-			.logout().logoutSuccessUrl("/").permitAll();
+            .logout()
+            .logoutSuccessUrl("/index?logout=true")
+            .invalidateHttpSession(true)
+            .permitAll()
+            .and()
+            .csrf()
+            .disable();
 	}
 	
 	

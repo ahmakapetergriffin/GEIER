@@ -5,8 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   
-  
-<script type="text/javascript">
+  <script type="text/javascript">
     
     function clearSearch() {
         window.location = "[[@{/}]]";
@@ -17,10 +16,12 @@
 	}
 	
 	function mios() {
-		window.location = "/get-products-no";
+		window.location = "/get-products";
 	}
 	
+	
 </script>
+
 
 
   <script src="/js/index.js"></script>
@@ -80,8 +81,7 @@
 <div class="Peter">
 
 
-
-<div align="center">
+<div align="center" th:with="someVariable=${#authentication.getPrincipal().getUsername()}">
 	
 	<div sec:authorize="isAuthenticated()">
 		Has iniciado Sesión como <b><span sec:authentication="name">Username</span></b>
@@ -125,12 +125,12 @@
 					<input type="number" name="keyword2" id="keyword2" size="50" th:value="${keyword2}" placeholder="Precio minimo"/>
 				</td>
 				<td>
-					<input type="number" name="keyword3" id="keyword3" size="50" th:value="${keyword3}" placeholder="Precio Maximo" />
+		            <input type="number" name="keyword3" id="keyword3" size="50" th:value="${keyword3}" placeholder="Precio Maximo" />
 				</td>
 			</tr>
 			<tr>
 				<td colspan="2">
-					<input type="submit" value="Search"  style="display: block;margin: auto;"/>
+					<input type="submit" value="Search"  style="display: block;margin: auto;">
 				</td>
 			</tr>
 			</tbody>
@@ -146,12 +146,13 @@
 	<table>
 		<tr>
 			<td>
-				<input type="button" value="Mis Coches" id="btnClear" onclick="mios()" sec:authorize="hasAnyAuthority('CREATOR', 'ADMIN','USER')"/> 
+				<input type="button" value="Todos los coches" id="btnClear" onclick="mios()" sec:authorize="hasAnyAuthority('CREATOR', 'ADMIN','USER')"/> 
 			</td>
 		</tr>
 	</table>
 	
 	<br/>
+	
 
     <table border="1" cellpadding="30">
         <thead>
@@ -162,13 +163,14 @@
 				<th>Price</th>
 				
 				
-				<th sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR','USER')">Actions</th>				
+				<th>Actions</th>				
 				
 			</tr>
         </thead>
         
         <tbody>
         <tr th:each="product : ${products}">
+		<div th:if="${product.madein == someVariable}">
 			<td>
                 <img th:if="${product.image != null}" th:src="@{/{productId}/image(productId=${product.id})}" class="img-thumbnail" alt="Product Image" style="width: 350px;">
             </td>
@@ -179,12 +181,13 @@
             <td>
 				<a th:href="@{'/ver/' + ${product.id}}">Ver</a>		
 				&nbsp;&nbsp;
-				<a th:href="@{'/edit/' + ${product.id}}" sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">Edit</a>			
+				<a th:href="@{'/edit/' + ${product.id}}">Edit</a>			
 				&nbsp;&nbsp;
-				<a th:href="@{'/delete/' + ${product.id}}" sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">Delete</a>
+				<a th:href="@{'/delete/' + ${product.id}}">Delete</a>
 					
 					
 				</td>
+		</div>
         </tr>
         </tbody>
     </table>
@@ -197,14 +200,13 @@
 				<input type="button" value="Home" id="btnClear" onclick="clearSearch()"/> 
 			</td>
 			<td>
-				<input type="button"  sec:authorize="hasAnyAuthority('CREATOR', 'ADMIN','USER')" onclick="add()" value="Create New Product"/>
+				<input type="button"  onclick="add()" value="Create New Product"/>
 			</td>
 		</tr>
 	</table>
     
 
 </div>
-
 
 
 

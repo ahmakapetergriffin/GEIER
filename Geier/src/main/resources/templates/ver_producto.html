@@ -1,11 +1,4 @@
 
-
-
-
-
-
-
-
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
@@ -13,7 +6,22 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   
-  
+  <script type="text/javascript">
+    
+    function clearSearch() {
+        window.location = "[[@{/}]]";
+    }
+    
+    function add() {
+	 window.location = "/get-products";	
+	}
+	
+	function Mensajeria() {
+	 window.location = "/messages";	
+	}
+    
+
+</script>
 
 
 
@@ -75,84 +83,55 @@
 
 
 <div align="center">
+		<h1>STOCK</h1>
+		<br/>
 		
-<div sec:authorize="isAuthenticated()">
-		Has iniciado Sesión como <b><span sec:authentication="name" id="paratrampa">Username</span></b>
-		&nbsp; <br/>
-		
-		<i><span sec:authentication="principal.authorities">Roles</span></i>
-	</div>
+			<table border="1" cellpadding="30">
+				<tbody>
+					<tr>
+						                <td colspan="6">
+											<div style="text-align: center;">
+												 <img th:if="${product.image != null}" th:src="@{/{productId}/image(productId=${product.id})}" class="img-thumbnail" alt="Product Image" style="width: 550px;">    
+											</div>
+							            </td>
+						<tr>
+							<th>Marca</th>
+							<th>Modelo</th>
+							<th>Precio</th>
+							<th>Vendedor</th>
+							<th>Ubicacion</th>
+							<th>Telefono</th>
+						</tr>
+						<tr>
+										<td th:text="*{product.brand}">Marca</td>
+										<td th:text="*{product.name}">Modelo</td>
+										<td th:text="*{product.price}">Precio</td>
+										<td th:text="*{product.madein}">Dueño</td>
+										<td th:text="*{product.ubicacion}">ubicacion</td>
+										<td th:text="*{product.telefono}">Telefono</td>
 	
-	<div th:with="someVariable=${#authentication.getPrincipal().getUsername()}">
-	
-	 
-	 
-		<!--
-		<div sec:authentication="principal.username"/>
-		  <span th:text="${#authentication.getPrincipal().getUsername()}"></span>
-		  
-	  -->
-	
-	
-	<br/><br/>
-	
-	<a href="newMessages">Crear nuevo mensaje</a>
-	
-	<br/> <br/>
-	
-	
-
-	<br/><br/>
-	
-	
-	
-	
-	<table border="1" cellpadding="10" id="tabla">
-		<thead>
-			<tr>
-				<th>Enviado Por : </th>
-				<th>Asunto :</th>
-				<th>Acciones :</th>
-
-				
+					</tr>
+				</tbody>
+			</table>
 			
-				
-			</tr>
-		</thead>
-		<tbody>
+			<br/> <br/> <br/>
 			
-			
+			<table>
+		<tr>
+			<td>
+				<input type="button"  onclick="Mensajeria()" value="Messages" sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR','USER')"/>
+			</td>
+			<td>
+				<input type="button" value="Home" id="btnClear" onclick="clearSearch()"/> 
+			</td>
+			<td>
+				<input type="button"  onclick="add()" value="Volver a stock"/>
+			</td>
 
-
-			
-			<tr th:each="messages : ${listMessages}">
-				<div th:if="${messages.username == someVariable}">
-				<td th:text="${messages.sentby}">Sent by: </td>
-				<td th:text="${messages.asunto}">Asunto : </td>
-				<td>
-					<a th:href="@{'/edit1/' + ${messages.id}}">Ver</a>
-					<a th:href="@{'/delete1/' + ${messages.id}}">Delete</a>
-				</td>
-				</div>
-			</tr>
-			
-
-		
-
-		</tbody>
+		</tr>
 	</table>
-	
-	<br/> <br/>
-	
-	<input type="button" value="Clear" id="btnClear" onclick="clearSearch()"  />
-	
-	<br/> <br/>
-	
-	 <a th:href = "@{/enviados}"> Enviados </a> <br/>
-	
-
-	
-</div>
+			
+			
 </div>
 
 

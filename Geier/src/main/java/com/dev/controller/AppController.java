@@ -62,9 +62,31 @@ public class AppController {
 	
 	
 
-	@GetMapping("")
+	@GetMapping(value={"", "index"})
 	public String viewHomePage() {
 		return "index";
+	}
+	
+
+	
+	@GetMapping(value={"/login"})
+	public String viewLoginPage() {
+		return "login";
+	}
+	
+	@GetMapping(value={"/historia"})
+	public String viewHistoryPage() {
+		return "historia";
+	}
+	
+	@GetMapping(value={"/help"})
+	public String viewHelpPage() {
+		return "ayuda";
+	}
+	
+	@GetMapping(value={"/mapa"})
+	public String viewMapa() {
+		return "mapa";
 	}
 	
 	
@@ -108,6 +130,23 @@ public class AppController {
 		}
 	}
 	
+	
+	@RequestMapping("/users/{id}") 
+	public ModelAndView showEditUserForm(@PathVariable(name = "id") Long id) {
+		ModelAndView mav = new ModelAndView("edituser");
+		
+		User user = userService.get(id);
+		mav.addObject("user", user);
+		
+		return mav;
+	}
+	
+	@RequestMapping(value = "/saveuser", method = RequestMethod.POST)
+	public String saveUser(@ModelAttribute("user") User user) {
+		userService.save(user);
+		
+		return "redirect:/users";
+	}
 
 	
 	//LOGIN - USUARIO
@@ -131,12 +170,12 @@ public class AppController {
 			return "new_message";
 		}
 		
+		
 		@RequestMapping(value = "/save1", method = RequestMethod.POST)
-		public String saveMessage(@ModelAttribute("message") Messages message,@ModelAttribute("enviado") Enviados enviado) {
+		public String saveMessage(@ModelAttribute("message") Messages message) {
 			messageService.save(message);
-			enviadosService.save(enviado);
 			
-			return "redirect:/";
+			return "redirect:/enviados";
 		}
 		
 		
@@ -154,7 +193,7 @@ public class AppController {
 		public String deleteMessage(@PathVariable(name = "id") Integer id) {
 			messageService.delete(id);
 			
-			return "messages";
+			return "redirect:/messages";
 		}
 		
 		
@@ -180,7 +219,7 @@ public class AppController {
 		@GetMapping("/enviados")
 		public String listEnviados(Model model) {
 			
-			List<Enviados> listMessages = enviadosService.listAll();
+			List<Messages> listMessages = enviadosService.listAll();
 			model.addAttribute("listMessages", listMessages);
 
 			return "enviados";
@@ -191,7 +230,7 @@ public class AppController {
 		public ModelAndView showEnviadoForm(@PathVariable(name = "id") Integer id) {
 			ModelAndView mav = new ModelAndView("ver_enviado");
 			
-			Enviados enviado = enviadosService.get(id);
+			Messages enviado = enviadosService.get(id);
 			mav.addObject("enviado", enviado);
 			
 			return mav;
@@ -202,7 +241,7 @@ public class AppController {
 		public String deleteEnviado(@PathVariable(name = "id") Integer id) {
 			enviadosService.delete(id);
 			
-			return "enviados";
+			return "redirect:/enviados";
 		}
 		
 		
@@ -236,6 +275,20 @@ public class AppController {
 	        
 	        return "get-products";
 	    }
+	    
+	    @GetMapping("/get-products-no")
+	    public String listProductsNo(Model model,@Param("keyword") String keyword,@Param("keyword1") String keyword1,@Param("keyword2") Float keyword2,@Param("keyword3") Float keyword3) {
+	        List<Product> products = productService.getProducts(keyword,keyword1,keyword2,keyword3);
+	        
+	        model.addAttribute("products", products);
+	        model.addAttribute("keyword", keyword);
+			model.addAttribute("keyword1", keyword1);
+			model.addAttribute("keyword2", keyword2);
+			model.addAttribute("keyword3", keyword3);
+	        
+	        return "get-products-no";
+	    }
+	    
 	    //Get Image using product ID
 	    @GetMapping(value = "/{productId}/image")
 	    public ResponseEntity<byte[]> getProductImage(@PathVariable Long productId) {
@@ -250,6 +303,16 @@ public class AppController {
 	            return new ResponseEntity<>(new byte[0], HttpStatus.NOT_FOUND);
 	        }
 	    }
+	    
+	    @RequestMapping("/ver/{id}")
+		public ModelAndView showverProductForm(@PathVariable(name = "id") Long id) {
+			ModelAndView mav = new ModelAndView("ver_producto");
+			
+			Product product = productService.get(id);
+			mav.addObject("product", product);
+			
+			return mav;
+		}
 	    
 	    @RequestMapping("/edit/{id}")
 		public ModelAndView showEditProductForm(@PathVariable(name = "id") Long id) {
@@ -266,7 +329,7 @@ public class AppController {
 		public String deleteProduct(@PathVariable(name = "id") Long id) {
 			productService.delete(id);
 			
-			return "redirect:/";
+			return "redirect:/get-products";
 		}
 	    
 		

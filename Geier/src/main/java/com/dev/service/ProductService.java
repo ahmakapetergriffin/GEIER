@@ -29,31 +29,25 @@ public class ProductService {
     public List<Product> getProducts(String keyword,String keyword1,Float keyword2,Float keyword3){
        
     	
-    	if (keyword != null && keyword1 != null) {
-            return repo.searchAll(keyword,keyword1); 
+    	if (keyword != null && keyword1 != null && keyword2 != null && keyword3 != null) {
+            return repo.searchAll(keyword,keyword1,keyword2,keyword3); 
             
        
+		 } else if (keyword != null && keyword1 == null && keyword2 == null && keyword3 == null) {
+			 return repo.searchName(keyword); 
+			 
+		 } else if (keyword == null && keyword1 != null && keyword2 == null && keyword3 == null) {
+			 return repo.searchBrand(keyword1);
+		 
+		 } else if (keyword == null && keyword1 == null && keyword2 != null && keyword3 != null) {
+			 return repo.searchPrice(keyword2,keyword3); 
+			 
+		 } else if (keyword != null && keyword1 != null && keyword2 == null && keyword3 == null) {
+			 return repo.searchNombres(keyword,keyword1); 
 		 }
 		
 		
-        
-		/*
-		
-		if (keyword != null && keyword1 == null) {
-            return repo.searchName(keyword); 
-            
-        } else if (keyword1 != null && keyword == null) {
-        	return repo.searchBrand(keyword1);
-        }
-		 
-		 
-		
-		
-		if (keyword2 != null && keyword3 != null) {
-            return repo.searchPrice(keyword2,keyword3); 
-            
-        }
-        */
+  
 
     	
     	
